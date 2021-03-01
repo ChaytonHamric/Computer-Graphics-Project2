@@ -1,3 +1,6 @@
+
+var squareRotation = 0.0;
+
 main();
 
 //
@@ -59,7 +62,19 @@ function main() {
     const buffers = initBuffer(gl);
    
     // Draw
-    drawScene(gl, ProgramInfo, buffers);
+    var then = 0;
+    const rotationSpeed = 0.002; 
+    function render(now){
+        now *= rotationSpeed;
+        const deltaTime = now - then;
+        then = now;
+        drawScene(gl, ProgramInfo, buffers, deltaTime);
+        
+        requestAnimationFrame(render);
+    }
+
+    requestAnimationFrame(render);
+    
     
 }
 
@@ -147,7 +162,7 @@ function initBuffer(gl){
 }
 
 // Draw
-function drawScene(gl, ProgramInfo, buffers){
+function drawScene(gl, ProgramInfo, buffers, deltaTime){
     gl.clearColor(0.0, 0.0, 0.0, 1.0);  // Sets canvas to white
     gl.clearDepth(1);           // Clears everything
     gl.enable(gl.DEPTH_TEST);   // Enables depth tester
@@ -172,6 +187,10 @@ function drawScene(gl, ProgramInfo, buffers){
     // Set the draw position
     const modelViewMatrix = mat4.create();
     mat4.translate(modelViewMatrix, modelViewMatrix, [-0.0, 0.0, -6.0]);
+
+    squareRotation += deltaTime;
+
+    mat4.rotate(modelViewMatrix, modelViewMatrix, squareRotation, [0, 0, 1]);
 
     // Pulling position to webGL
     {
