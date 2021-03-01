@@ -16,9 +16,23 @@ function main() {
         return;
     }
 
-    // Set clear color to black, fully opaque
-    gl.clearColor(1, 1, 1, 1);
-    // Clear the color buffer with specified clear color
-    gl.clear(gl.COLOR_BUFFER_BIT); 
+    // Vertex Shader Program
+    const VertexShader = `
+    attribute vec4 aVertexPosition;
+
+    uniform mat4 uModelViewMatrix;
+    uniform mat4 uProjectionmatrix;
+
+    void main(){
+        gl_position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
+    }
+    `;
+
+    // Fragment Shader program
+    const FragShader = `
+    void main(){
+        gl_FragColor = vec4(0, 0, 0, 1);
+    }
+    `;
     
 }
