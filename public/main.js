@@ -15,24 +15,170 @@ function main() {
         alert('Unable to initialize WebGL. Your browser or machine may not support it.');
         return;
     }
-
+    
     // Vertex Shader Program
-    const VertexShader = `
+    const vShaderProgram = `
     attribute vec4 aVertexPosition;
-
     uniform mat4 uModelViewMatrix;
-    uniform mat4 uProjectionmatrix;
-
-    void main(){
-        gl_position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
-    }
-    `;
-
-    // Fragment Shader program
-    const FragShader = `
-    void main(){
-        gl_FragColor = vec4(0, 0, 0, 1);
+    uniform mat4 uProjectionMatrix;
+    void main() {
+      gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
     }
     `;
     
+    // Fragment Shader program
+    const fShaderProgram = `
+   void main() {
+      gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
+    }
+    `;
+
+    // Initialize the shader program
+    const ShaderProgram = initShaderProgram(gl, vShaderProgram, fShaderProgram);
+    
+    //Lookup attributes and uniform locations
+    const ProgramInfo = {
+        program: ShaderProgram,
+        attribLocations: {
+            vertexPosition: gl.getAttribLocation(ShaderProgram, 'aVertexPosition'),
+        },
+        uniformLocations: {
+            projectionMatrix: gl.getUniformLocation(ShaderProgram, 'uProjectionMatrix'),
+            modelViewMatrix: gl.getUniformLocation(ShaderProgram, 'uModelViewMatrix'),
+        },
+    };
+
+    const buffers = initBuffer(gl);
+
+    // Draw
+    drawScene(gl, ProgramInfo, buffers);
+    
 }
+
+
+// Now we have to pass the shaders to WebGL
+
+// Initialize shader program
+function initShaderProgram(gl, vShaderProgram, fShaderProgram) {
+    const VertexShader = loadShader(gl, gl.VERTEX_SHADER, vShaderProgram);
+    const FragmentShader = loadShader(gl, gl.FRAGMENT_SHADER, fShaderProgram);
+
+   
+    // Create the shader program
+
+    const shaderProgram = gl.createProgram();
+    gl.attachShader(shaderProgram, VertexShader); // we are attaching the vertex shader to the shader program
+    gl.attachShader(shaderProgram, FragmentShader); // then we are attaching the fragment shader to the shader program also
+    gl.linkProgram(shaderProgram); // finally we link the two to combine into one shader program
+    
+
+    // check to if link failed
+    if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
+        alert("Shader Link failed " + gl.getProgramInfoLog(shaderProgram));
+        return null;
+    }
+
+    // If Link is successful we return shaderProgram
+    return shaderProgram;
+
+}
+
+// Load Shader
+function loadShader(gl, type, source) {
+    const shader = gl.createShader(type);
+
+    // Send the shader source
+    gl.shaderSource(shader, source);
+
+    // Compile shader program
+    gl.compileShader(shader);
+
+    // Check to see if compiled
+    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+        alert("Shader did not compile " + gl.getShaderInfoLog(shader));
+        gl.deleteShader(shader);
+        return null;
+    }
+
+    // If shader doesn't fail we return shader
+    return shader;
+}
+
+// Create initial buffer for our shape
+function initBuffer(gl){
+    // Create a buffer
+    const positionBuffer = gl.createBuffer();
+
+    // Select the buffer
+    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+
+    // Shape Array
+    const positions = [
+        1.0, 1.0,
+        -1.0, 1.0,
+        1.0, -1.0,
+        -1.0, -1.0,
+    ];
+
+    // Pass array into webGL
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+
+    return {position: positionBuffer};
+}
+
+// Draw
+function drawScene(gl, ProgramInfo, buffers){
+    gl.clearColor(0.0, 0.0, 0.0, 1.0);  // Sets canvas to white
+    gl.clearDepth(1);           // Clears everything
+    gl.enable(gl.DEPTH_TEST);   // Enables depth tester
+    gl.depthFunc(gl.LEQUAL);    // Closer objects overlap the further away objects
+
+    // Clear canvas
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+    // Create perspective matrix
+    const FOV = 45 * Math.PI / 180;
+    const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+    const zNear = 0.1;
+    const zFar = 100.0;
+    const projectionMatrix = mat4.create();
+
+    mat4.perspective(projectionMatrix,
+        FOV,
+        aspect,
+        zNear,
+        zFar);
+
+    // Set the draw position
+    const modelViewMatrix = mat4.create();
+    mat4.translate(modelViewMatrix, modelViewMatrix, [-0.0, 0.0, -6.0]);
+
+    // Pulling position to webGL
+    {
+        const numComponents = 2;
+        const type = gl.FLOAT;
+        const normalize = false;
+        const stride = 0;
+        const offset = 0;
+        gl.bindBuffer(gl.ARRAY_BUFFER, buffers.position);
+        gl.vertexAttribPointer(
+            ProgramInfo.attribLocations.vertexPosition,
+            numComponents,
+            type,
+            normalize,
+            stride,
+            offset);
+        gl.enableVertexAttribArray(
+            ProgramInfo.attribLocations.vertexPosition);
+    }
+
+    // Use Program when drawing
+    gl.useProgram(ProgramInfo.program);
+
+    // Set shader uniforms
+    gl.uniformMatrix4fv(ProgramInfo.uniformLocations.projectionMatrix, false, projectionMatrix);
+    gl.uniformMatrix4fv(ProgramInfo.uniformLocations.modelViewMatrix, false, modelViewMatrix);
+
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    
+} 
