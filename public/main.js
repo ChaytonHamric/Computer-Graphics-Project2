@@ -16,10 +16,10 @@ function main() {
         return;
     }
     
-    //
-    // ARM 1 MODEL
-    ///
-
+    /*
+            ARM 1 MODEL
+    */
+    {
     // Vertex Shader Program
     const vArmOneShaderProgram = `
     attribute vec4 aArmOneVertexPosition;
@@ -59,11 +59,78 @@ function main() {
             modelViewMatrix: gl.getUniformLocation(ArmOneShaderProgram, 'uArmOneModelViewMatrix'),
         },
     };
+
+    // Positioning of vectors
+    const positions = [
+        // Front face
+        -0.5, -0.2, 0.2,
+        0.5, -0.2, 0.2,
+        0.5, 0.2, 0.2,
+        -0.5, 0.2, 0.2,
+
+        // Back face
+        -0.5, -0.2, -0.2,
+        -0.5, 0.2, -0.2,
+        0.5, 0.2, -0.2,
+        0.5, -0.2, -0.2,
+
+        // Top face
+        -0.5, 0.2, -0.2,
+        -0.5, 0.2, 0.2,
+        0.5, 0.2, 0.2,
+        0.5, 0.2, -0.2,
+
+        // Bottom face
+        -0.5, -0.2, -0.2,
+        0.5, -0.2, -0.2,
+        0.5, -0.2, 0.2,
+        -0.5, -0.2, 0.2,
+
+        // Right face
+        0.5, -0.2, -0.2,
+        0.5, 0.2, -0.2,
+        0.5, 0.2, 0.2,
+        0.5, -0.2, 0.2,
+
+        // Left face
+        -0.5, -0.2, -0.2,
+        -0.5, -0.2, 0.2,
+        -0.5, 0.2, 0.2,
+        -0.5, 0.2, -0.2,
+    ];
     
-    const ArmOneBuffers = initBuffer(gl);
+    // Coloring of 3D Model
+    const faceColors = [
+        [1.0, 1.0, 1.0, 1.0],    // Front face: white
+        [1.0, 0.0, 0.0, 1.0],    // Back face: red
+        [0.0, 1.0, 0.0, 1.0],    // Top face: green
+        [0.0, 0.0, 1.0, 1.0],    // Bottom face: blue
+        [1.0, 1.0, 0.0, 1.0],    // Right face: yellow
+        [1.0, 0.0, 1.0, 1.0],    // Left face: purple
+    ];
+
+    // Indices for individual vectors
+    const indices = [
+        0, 1, 2, 0, 2, 3,    // front
+        4, 5, 6, 4, 6, 7,    // back
+        8, 9, 10, 8, 10, 11,   // top
+        12, 13, 14, 12, 14, 15,   // bottom
+        16, 17, 18, 16, 18, 19,   // right
+        20, 21, 22, 20, 22, 23,   // left
+    ];
+
+    const ArmOneBuffers = initBuffer(gl, positions, faceColors, indices);
    
     // Draw ArmOne
     drawScene(gl, ArmOneProgramInfo, ArmOneBuffers);
+    }
+
+    /*
+            ARM 2 MODEL
+    */
+   {
+
+   }
     
 }
 
@@ -117,70 +184,7 @@ function loadShader(gl, type, source) {
 }
 
 // Create initial buffer for our shape
-function initBuffer(gl){
-
-    // Shape Array
-    // const positions = [
-    //     1.0, 1.0,
-    //     -1.0, 1.0,
-    //     1.0, -1.0,
-    //     -1.0, -1.0,
-    // ];
-
-    const positions = [
-        // Front face
-        -0.5, -0.2, 0.2,
-        0.5, -0.2, 0.2,
-        0.5, 0.2, 0.2,
-        -0.5, 0.2, 0.2,
-
-        // Back face
-        -0.5, -0.2, -0.2,
-        -0.5, 0.2, -0.2,
-        0.5, 0.2, -0.2,
-        0.5, -0.2, -0.2,
-
-        // Top face
-        -0.5, 0.2, -0.2,
-        -0.5, 0.2, 0.2,
-        0.5, 0.2, 0.2,
-        0.5, 0.2, -0.2,
-
-        // Bottom face
-        -0.5, -0.2, -0.2,
-        0.5, -0.2, -0.2,
-        0.5, -0.2, 0.2,
-        -0.5, -0.2, 0.2,
-
-        // Right face
-        0.5, -0.2, -0.2,
-        0.5, 0.2, -0.2,
-        0.5, 0.2, 0.2,
-        0.5, -0.2, 0.2,
-
-        // Left face
-        -0.5, -0.2, -0.2,
-        -0.5, -0.2, 0.2,
-        -0.5, 0.2, 0.2,
-        -0.5, 0.2, -0.2,
-    ];
-
-    // 2D Color Array
-    // const colors = [
-    //     1.0, 0.0, 1.0, 1.0, // (Top Right)
-    //     1.0, 0.0, 1.0, 1.0, // (Top Left)
-    //     0.0, 0.0, 1.0, 1.0, // (Bottom Right)
-    //     0.0, 0.0, 1.0, 1.0, // (Bottom Left)
-    //]
-
-    const faceColors = [
-        [1.0, 1.0, 1.0, 1.0],    // Front face: white
-        [1.0, 0.0, 0.0, 1.0],    // Back face: red
-        [0.0, 1.0, 0.0, 1.0],    // Top face: green
-        [0.0, 0.0, 1.0, 1.0],    // Bottom face: blue
-        [1.0, 1.0, 0.0, 1.0],    // Right face: yellow
-        [1.0, 0.0, 1.0, 1.0],    // Left face: purple
-    ];
+function initBuffer(gl, positions, faceColors, indices){
 
     // Create Position Buffer
     const positionBuffer = gl.createBuffer();
@@ -202,21 +206,8 @@ function initBuffer(gl){
     const indexBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
 
-    const indices = [
-        0, 1, 2,     0, 2, 3,    // front
-        4, 5, 6,     4, 6, 7,    // back
-        8, 9, 10,    8, 10, 11,   // top
-        12, 13, 14,  12, 14, 15,   // bottom
-        16, 17, 18,  16, 18, 19,   // right
-        20, 21, 22,  20, 22, 23,   // left
-    ];
-
     // Now send the element array to GL
-
-    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,
-        new Uint16Array(indices), gl.STATIC_DRAW);
-
-
+    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,new Uint16Array(indices), gl.STATIC_DRAW);
 
     return {
         position: positionBuffer, 
