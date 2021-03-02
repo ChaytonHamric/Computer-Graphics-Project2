@@ -19,6 +19,10 @@ function main() {
         return;
     }
     
+    //
+    // ARM 1 MODEL
+    ///
+
     // Vertex Shader Program
     const vShaderProgram = `
     attribute vec4 aVertexPosition;
@@ -74,7 +78,6 @@ function main() {
     }
 
     requestAnimationFrame(render);
-    
     
 }
 
@@ -140,40 +143,40 @@ function initBuffer(gl){
 
     const positions = [
         // Front face
-        -1.0, -1.0, 1.0,
-        1.0, -1.0, 1.0,
-        1.0, 1.0, 1.0,
-        -1.0, 1.0, 1.0,
+        -0.5, -0.2, 0.2,
+        0.5, -0.2, 0.2,
+        0.5, 0.2, 0.2,
+        -0.5, 0.2, 0.2,
 
         // Back face
-        -1.0, -1.0, -1.0,
-        -1.0, 1.0, -1.0,
-        1.0, 1.0, -1.0,
-        1.0, -1.0, -1.0,
+        -0.5, -0.2, -0.2,
+        -0.5, 0.2, -0.2,
+        0.5, 0.2, -0.2,
+        0.5, -0.2, -0.2,
 
         // Top face
-        -1.0, 1.0, -1.0,
-        -1.0, 1.0, 1.0,
-        1.0, 1.0, 1.0,
-        1.0, 1.0, -1.0,
+        -0.5, 0.2, -0.2,
+        -0.5, 0.2, 0.2,
+        0.5, 0.2, 0.2,
+        0.5, 0.2, -0.2,
 
         // Bottom face
-        -1.0, -1.0, -1.0,
-        1.0, -1.0, -1.0,
-        1.0, -1.0, 1.0,
-        -1.0, -1.0, 1.0,
+        -0.5, -0.2, -0.2,
+        0.5, -0.2, -0.2,
+        0.5, -0.2, 0.2,
+        -0.5, -0.2, 0.2,
 
         // Right face
-        1.0, -1.0, -1.0,
-        1.0, 1.0, -1.0,
-        1.0, 1.0, 1.0,
-        1.0, -1.0, 1.0,
+        0.5, -0.2, -0.2,
+        0.5, 0.2, -0.2,
+        0.5, 0.2, 0.2,
+        0.5, -0.2, 0.2,
 
         // Left face
-        -1.0, -1.0, -1.0,
-        -1.0, -1.0, 1.0,
-        -1.0, 1.0, 1.0,
-        -1.0, 1.0, -1.0,
+        -0.5, -0.2, -0.2,
+        -0.5, -0.2, 0.2,
+        -0.5, 0.2, 0.2,
+        -0.5, 0.2, -0.2,
     ];
 
     // 2D Color Array
@@ -265,8 +268,9 @@ function drawScene(gl, ProgramInfo, buffers, deltaTime){
 
     cubeRotation += deltaTime;
 
-    mat4.rotate(modelViewMatrix, modelViewMatrix, cubeRotation, [0, 0, 1]);
-    mat4.rotate(modelViewMatrix, modelViewMatrix, cubeRotation, [0, 1, 0]);
+    mat4.rotate(modelViewMatrix, modelViewMatrix, -0.45, [0, 0, 1]);
+    mat4.rotate(modelViewMatrix, modelViewMatrix, 0.45, [0, 1, 0]);
+    mat4.rotate(modelViewMatrix, modelViewMatrix, -1, [1, 0, 0]);
 
     // Pulling position to webGL
     {
