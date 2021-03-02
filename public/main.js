@@ -1,6 +1,3 @@
-
-var cubeRotation = 0.0;
-
 main();
 
 //
@@ -24,60 +21,49 @@ function main() {
     ///
 
     // Vertex Shader Program
-    const vShaderProgram = `
-    attribute vec4 aVertexPosition;
-    attribute vec4 aVertexColor;
+    const vArmOneShaderProgram = `
+    attribute vec4 aArmOneVertexPosition;
+    attribute vec4 aArmOneVertexColor;
 
-    uniform mat4 uModelViewMatrix;
-    uniform mat4 uProjectionMatrix;
+    uniform mat4 uArmOneModelViewMatrix;
+    uniform mat4 uArmOneProjectionMatrix;
 
-    varying lowp vec4 vColor;
+    varying lowp vec4 vArmOneColor;
 
     void main() {
-      gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
-      vColor = aVertexColor;
+      gl_Position = uArmOneProjectionMatrix * uArmOneModelViewMatrix * aArmOneVertexPosition;
+      vArmOneColor = aArmOneVertexColor;
     }
     `;
     
     // Fragment Shader program
-    const fShaderProgram = `
-    varying lowp vec4 vColor; 
+    const fArmOneShaderProgram = `
+    varying lowp vec4 vArmOneColor; 
     void main() {
-        gl_FragColor = vColor;
+        gl_FragColor = vArmOneColor;
     }
     `;
 
     // Initialize the shader program
-    const ShaderProgram = initShaderProgram(gl, vShaderProgram, fShaderProgram);
+    const ArmOneShaderProgram = initShaderProgram(gl, vArmOneShaderProgram, fArmOneShaderProgram);
     
     //Lookup attributes and uniform locations
-    const ProgramInfo = {
-        program: ShaderProgram,
+    const ArmOneProgramInfo = {
+        program: ArmOneShaderProgram,
         attribLocations: {
-            vertexPosition: gl.getAttribLocation(ShaderProgram, 'aVertexPosition'),
-            vertexColor: gl.getAttribLocation(ShaderProgram, 'aVertexColor'),
+            vertexPosition: gl.getAttribLocation(ArmOneShaderProgram, 'aArmOneVertexPosition'),
+            vertexColor: gl.getAttribLocation(ArmOneShaderProgram, 'aArmOneVertexColor'),
         },
         uniformLocations: {
-            projectionMatrix: gl.getUniformLocation(ShaderProgram, 'uProjectionMatrix'),
-            modelViewMatrix: gl.getUniformLocation(ShaderProgram, 'uModelViewMatrix'),
+            projectionMatrix: gl.getUniformLocation(ArmOneShaderProgram, 'uArmOneProjectionMatrix'),
+            modelViewMatrix: gl.getUniformLocation(ArmOneShaderProgram, 'uArmOneModelViewMatrix'),
         },
     };
     
-    const buffers = initBuffer(gl);
+    const ArmOneBuffers = initBuffer(gl);
    
-    // Draw
-    var then = 0;
-    const rotationSpeed = 0.002; 
-    function render(now){
-        now *= rotationSpeed;
-        const deltaTime = now - then;
-        then = now;
-        drawScene(gl, ProgramInfo, buffers, deltaTime);
-        
-        requestAnimationFrame(render);
-    }
-
-    requestAnimationFrame(render);
+    // Draw ArmOne
+    drawScene(gl, ArmOneProgramInfo, ArmOneBuffers);
     
 }
 
@@ -240,7 +226,7 @@ function initBuffer(gl){
 }
 
 // Draw
-function drawScene(gl, ProgramInfo, buffers, deltaTime){
+function drawScene(gl, ProgramInfo, buffers){
     gl.clearColor(0.0, 0.0, 0.0, 1.0);  // Sets canvas to white
     gl.clearDepth(1);           // Clears everything
     gl.enable(gl.DEPTH_TEST);   // Enables depth tester
@@ -265,8 +251,6 @@ function drawScene(gl, ProgramInfo, buffers, deltaTime){
     // Set the draw position
     const modelViewMatrix = mat4.create();
     mat4.translate(modelViewMatrix, modelViewMatrix, [-0.0, 0.0, -6.0]);
-
-    cubeRotation += deltaTime;
 
     mat4.rotate(modelViewMatrix, modelViewMatrix, -0.45, [0, 0, 1]);
     mat4.rotate(modelViewMatrix, modelViewMatrix, 0.45, [0, 1, 0]);
