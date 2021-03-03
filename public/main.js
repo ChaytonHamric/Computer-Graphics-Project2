@@ -127,7 +127,7 @@ function main() {
 
         xTranslation: 0,
         yTranslation: -0.2,
-        zTranslation: -5.0,
+        zTranslation: -5.0
     };
 
     const ArmOneBuffers = initBuffer(gl, positions, faceColors, indices);
@@ -497,7 +497,608 @@ function main() {
         drawScene(gl, HeadProgramInfo, HeadBuffers, HeadPosInfo);
     }
 
-    
+    /*
+           Leg 1 MODEL
+   */
+    {
+        // Vertex Shader Program
+        const vLegOneShaderProgram = `
+        attribute vec4 aLegOneVertexPosition;
+        attribute vec4 aLegOneVertexColor;
+
+        uniform mat4 uLegOneModelViewMatrix;
+        uniform mat4 uLegOneProjectionMatrix;
+
+        varying lowp vec4 vLegOneColor;
+
+        void main() {
+            gl_Position = uLegOneProjectionMatrix * uLegOneModelViewMatrix * aLegOneVertexPosition;
+            vLegOneColor = aLegOneVertexColor;
+        }
+        `;
+
+        // Fragment Shader program
+        const fLegOneShaderProgram = `
+        varying lowp vec4 vLegOneColor; 
+        void main() {
+            gl_FragColor = vLegOneColor;
+        }
+        `;
+
+        // Initialize the shader program
+        const LegOneShaderProgram = initShaderProgram(gl, vLegOneShaderProgram, fLegOneShaderProgram);
+
+        //Lookup attributes and uniform locations
+        const LegOneProgramInfo = {
+            program: LegOneShaderProgram,
+            attribLocations: {
+                vertexPosition: gl.getAttribLocation(LegOneShaderProgram, 'aLegOneVertexPosition'),
+                vertexColor: gl.getAttribLocation(LegOneShaderProgram, 'aLegOneVertexColor'),
+            },
+            uniformLocations: {
+                projectionMatrix: gl.getUniformLocation(LegOneShaderProgram, 'uLegOneProjectionMatrix'),
+                modelViewMatrix: gl.getUniformLocation(LegOneShaderProgram, 'uLegOneModelViewMatrix'),
+            },
+        };
+
+        // Positioning of vectors
+        const LegOnePositions = [
+            // Front face
+            -0.5, -0.2, 0.2,
+            0.5, -0.2, 0.2,
+            0.5, 0.2, 0.2,
+            -0.5, 0.2, 0.2,
+
+            // Back face
+            -0.5, -0.2, -0.2,
+            -0.5, 0.2, -0.2,
+            0.5, 0.2, -0.2,
+            0.5, -0.2, -0.2,
+
+            // Top face
+            -0.5, 0.2, -0.2,
+            -0.5, 0.2, 0.2,
+            0.5, 0.2, 0.2,
+            0.5, 0.2, -0.2,
+
+            // Bottom face
+            -0.5, -0.2, -0.2,
+            0.5, -0.2, -0.2,
+            0.5, -0.2, 0.2,
+            -0.5, -0.2, 0.2,
+
+            // Right face
+            0.5, -0.2, -0.2,
+            0.5, 0.2, -0.2,
+            0.5, 0.2, 0.2,
+            0.5, -0.2, 0.2,
+
+            // Left face
+            -0.5, -0.2, -0.2,
+            -0.5, -0.2, 0.2,
+            -0.5, 0.2, 0.2,
+            -0.5, 0.2, -0.2,
+        ];
+
+        // Coloring of 3D Model
+        const LegOneFaceColors = [
+            [0.0, 0.4, 0.6, 1.0],    // Front face: white
+            [0.0, 1.0, 1.0, 1.0],    // Back face: red
+            [0.0, 1.0, 1.0, 1.0],    // Top face: green
+            [0.0, 1.0, 1.0, 1.0],    // Bottom face: blue
+            [0.0, 1.0, 1.0, 1.0],    // Right face: yellow
+            [0.0, 1.0, 1.0, 1.0],    // Left face: purple
+        ];
+
+        // Indices for individual vectors
+        const LegOneIndices = [
+            0, 1, 2, 0, 2, 3,    // front
+            4, 5, 6, 4, 6, 7,    // back
+            8, 9, 10, 8, 10, 11,   // top
+            12, 13, 14, 12, 14, 15,   // bottom
+            16, 17, 18, 16, 18, 19,   // right
+            20, 21, 22, 20, 22, 23,   // left
+        ];
+
+        // Rotation and Transition data
+        const LegOnePosInfo = {
+            xRotation: -0.45,
+            yRotation: 0,
+            zRotation: 1.5,
+
+            xTranslation: 0.45,
+            yTranslation: -1.75,
+            zTranslation: -6.0,
+        };
+
+        const LegOneBuffers = initBuffer(gl, LegOnePositions, LegOneFaceColors, LegOneIndices);
+
+        // Draw ArmOne
+        drawScene(gl, LegOneProgramInfo, LegOneBuffers, LegOnePosInfo);
+    }
+
+    /*
+          Leg 2 MODEL
+  */
+    {
+        // Vertex Shader Program
+        const vLegTwoShaderProgram = `
+        attribute vec4 aLegTwoVertexPosition;
+        attribute vec4 aLegTwoVertexColor;
+
+        uniform mat4 uLegTwoModelViewMatrix;
+        uniform mat4 uLegTwoProjectionMatrix;
+
+        varying lowp vec4 vLegTwoColor;
+
+        void main() {
+            gl_Position = uLegTwoProjectionMatrix * uLegTwoModelViewMatrix * aLegTwoVertexPosition;
+            vLegTwoColor = aLegTwoVertexColor;
+        }
+        `;
+
+        // Fragment Shader program
+        const fLegTwoShaderProgram = `
+        varying lowp vec4 vLegTwoColor; 
+        void main() {
+            gl_FragColor = vLegTwoColor;
+        }
+        `;
+
+        // Initialize the shader program
+        const LegTwoShaderProgram = initShaderProgram(gl, vLegTwoShaderProgram, fLegTwoShaderProgram);
+
+        //Lookup attributes and uniform locations
+        const LegTwoProgramInfo = {
+            program: LegTwoShaderProgram,
+            attribLocations: {
+                vertexPosition: gl.getAttribLocation(LegTwoShaderProgram, 'aLegTwoVertexPosition'),
+                vertexColor: gl.getAttribLocation(LegTwoShaderProgram, 'aLegTwoVertexColor'),
+            },
+            uniformLocations: {
+                projectionMatrix: gl.getUniformLocation(LegTwoShaderProgram, 'uLegTwoProjectionMatrix'),
+                modelViewMatrix: gl.getUniformLocation(LegTwoShaderProgram, 'uLegTwoModelViewMatrix'),
+            },
+        };
+
+        // Positioning of vectors
+        const LegTwoPositions = [
+            // Front face
+            -0.5, -0.2, 0.2,
+            0.5, -0.2, 0.2,
+            0.5, 0.2, 0.2,
+            -0.5, 0.2, 0.2,
+
+            // Back face
+            -0.5, -0.2, -0.2,
+            -0.5, 0.2, -0.2,
+            0.5, 0.2, -0.2,
+            0.5, -0.2, -0.2,
+
+            // Top face
+            -0.5, 0.2, -0.2,
+            -0.5, 0.2, 0.2,
+            0.5, 0.2, 0.2,
+            0.5, 0.2, -0.2,
+
+            // Bottom face
+            -0.5, -0.2, -0.2,
+            0.5, -0.2, -0.2,
+            0.5, -0.2, 0.2,
+            -0.5, -0.2, 0.2,
+
+            // Right face
+            0.5, -0.2, -0.2,
+            0.5, 0.2, -0.2,
+            0.5, 0.2, 0.2,
+            0.5, -0.2, 0.2,
+
+            // Left face
+            -0.5, -0.2, -0.2,
+            -0.5, -0.2, 0.2,
+            -0.5, 0.2, 0.2,
+            -0.5, 0.2, -0.2,
+        ];
+
+        // Coloring of 3D Model
+        const LegTwoFaceColors = [
+            [0.0, 0.4, 0.6, 1.0],    // Front face: white
+            [0.0, 1.0, 1.0, 1.0],    // Back face: red
+            [0.0, 1.0, 1.0, 1.0],    // Top face: green
+            [0.0, 1.0, 1.0, 1.0],    // Bottom face: blue
+            [0.0, 1.0, 1.0, 1.0],    // Right face: yellow    // Right face: yellow
+            [1.0, 0.0, 1.0, 1.0],    // Left face: purple
+        ];
+
+        // Indices for individual vectors
+        const LegTwoIndices = [
+            0, 1, 2, 0, 2, 3,    // front
+            4, 5, 6, 4, 6, 7,    // back
+            8, 9, 10, 8, 10, 11,   // top
+            12, 13, 14, 12, 14, 15,   // bottom
+            16, 17, 18, 16, 18, 19,   // right
+            20, 21, 22, 20, 22, 23,   // left
+        ];
+
+        // Rotation and Transition data
+        const LegTwoPosInfo = {
+            xRotation: -0.7,
+            yRotation: 0.7,
+            zRotation: 0.5,
+
+            xTranslation: -0.25,
+            yTranslation: -1.5,
+            zTranslation: -6.0,
+        };
+
+        const LegTwoBuffers = initBuffer(gl, LegTwoPositions, LegTwoFaceColors, LegTwoIndices);
+
+        // Draw ArmOne
+        drawScene(gl, LegTwoProgramInfo, LegTwoBuffers, LegTwoPosInfo);
+    }
+
+    /*
+            Eye 1 MODEL
+    */
+    {
+        // Vertex Shader Program
+        const vEyeOneShaderProgram = `
+        attribute vec4 aEyeOneVertexPosition;
+        attribute vec4 aEyeOneVertexColor;
+
+        uniform mat4 uEyeOneModelViewMatrix;
+        uniform mat4 uEyeOneProjectionMatrix;
+
+        varying lowp vec4 vEyeOneColor;
+
+        void main() {
+            gl_Position = uEyeOneProjectionMatrix * uEyeOneModelViewMatrix * aEyeOneVertexPosition;
+            vEyeOneColor = aEyeOneVertexColor;
+        }
+        `;
+
+        // Fragment Shader program
+        const fEyeOneShaderProgram = `
+        varying lowp vec4 vEyeOneColor; 
+        void main() {
+            gl_FragColor = vEyeOneColor;
+        }
+        `;
+
+        // Initialize the shader program
+        const EyeOneShaderProgram = initShaderProgram(gl, vEyeOneShaderProgram, fEyeOneShaderProgram);
+
+        //Lookup attributes and uniform locations
+        const EyeOneProgramInfo = {
+            program: EyeOneShaderProgram,
+            attribLocations: {
+                vertexPosition: gl.getAttribLocation(EyeOneShaderProgram, 'aEyeOneVertexPosition'),
+                vertexColor: gl.getAttribLocation(EyeOneShaderProgram, 'aEyeOneVertexColor'),
+            },
+            uniformLocations: {
+                projectionMatrix: gl.getUniformLocation(EyeOneShaderProgram, 'uEyeOneProjectionMatrix'),
+                modelViewMatrix: gl.getUniformLocation(EyeOneShaderProgram, 'uEyeOneModelViewMatrix'),
+            },
+        };
+        // Object Details
+
+        // Positioning of vectors
+        const EyeOnePositions = [
+            // Front face
+            -0.05, -0.05, 0.05,
+            0.05, -0.05, 0.05,
+            0.05, 0.05, 0.05,
+            -0.05, 0.05, 0.05,
+
+            // Back face
+            -0.05, -0.05, -0.05,
+            -0.05, 0.05, -0.05,
+            0.05, 0.05, -0.05,
+            0.05, -0.05, -0.05,
+
+            // Top face
+            -0.05, 0.05, -0.05,
+            -0.05, 0.05, 0.05,
+            0.05, 0.05, 0.05,
+            0.05, 0.05, -0.05,
+
+            // Bottom face
+            -0.05, -0.05, -0.05,
+            0.05, -0.05, -0.05,
+            0.05, -0.05, 0.05,
+            -0.05, -0.05, 0.05,
+
+            // Right face
+            0.05, -0.05, -0.05,
+            0.05, 0.05, -0.05,
+            0.05, 0.05, 0.05,
+            0.05, -0.05, 0.05,
+
+            // Left face
+            -0.05, -0.05, -0.05,
+            -0.05, -0.05, 0.05,
+            -0.05, 0.05, 0.05,
+            -0.05, 0.05, -0.05,
+        ];
+
+        // Coloring of 3D Model
+        const EyeOneFaceColors = [
+            [0.0, 0.0, 0.0, 1.0],    // Front face: white
+            [0.0, 0.0, 0.0, 1.0],    // Back face: red
+            [0.0, 0.0, 0.0, 1.0],    // Top face: green
+            [0.0, 0.0, 0.0, 1.0],    // Bottom face: blue
+            [0.0, 0.0, 0.0, 1.0],    // Right face: yellow
+            [0.0, 0.0, 0.0, 1.0],    // Left face: purple
+        ];
+
+        // Indices for individual vectors
+        const EyeOneIndices = [
+            0, 1, 2, 0, 2, 3,    // front
+            4, 5, 6, 4, 6, 7,    // back
+            8, 9, 10, 8, 10, 11,   // top
+            12, 13, 14, 12, 14, 15,   // bottom
+            16, 17, 18, 16, 18, 19,   // right
+            20, 21, 22, 20, 22, 23,   // left
+        ];
+
+        // Rotation and Transition data
+        const EyeOnePosInfo = {
+            xRotation: -0.45,
+            yRotation: 0,
+            zRotation: 1.5,
+
+            xTranslation: 0.35,
+            yTranslation: 0.3,
+            zTranslation: -5.0,
+        };
+
+        const EyeOneBuffers = initBuffer(gl, EyeOnePositions, EyeOneFaceColors, EyeOneIndices);
+
+        // Draw ArmOne
+        drawScene(gl, EyeOneProgramInfo, EyeOneBuffers, EyeOnePosInfo);
+    }
+
+    /*
+            Eye 2 MODEL
+    */
+    {
+        // Vertex Shader Program
+        const vEyeTwoShaderProgram = `
+        attribute vec4 aEyeTwoVertexPosition;
+        attribute vec4 aEyeTwoVertexColor;
+
+        uniform mat4 uEyeTwoModelViewMatrix;
+        uniform mat4 uEyeTwoProjectionMatrix;
+
+        varying lowp vec4 vEyeTwoColor;
+
+        void main() {
+            gl_Position = uEyeTwoProjectionMatrix * uEyeTwoModelViewMatrix * aEyeTwoVertexPosition;
+            vEyeTwoColor = aEyeTwoVertexColor;
+        }
+        `;
+
+        // Fragment Shader program
+        const fEyeTwoShaderProgram = `
+        varying lowp vec4 vEyeTwoColor; 
+        void main() {
+            gl_FragColor = vEyeTwoColor;
+        }
+        `;
+
+        // Initialize the shader program
+        const EyeTwoShaderProgram = initShaderProgram(gl, vEyeTwoShaderProgram, fEyeTwoShaderProgram);
+
+        //Lookup attributes and uniform locations
+        const EyeTwoProgramInfo = {
+            program: EyeTwoShaderProgram,
+            attribLocations: {
+                vertexPosition: gl.getAttribLocation(EyeTwoShaderProgram, 'aEyeTwoVertexPosition'),
+                vertexColor: gl.getAttribLocation(EyeTwoShaderProgram, 'aEyeTwoVertexColor'),
+            },
+            uniformLocations: {
+                projectionMatrix: gl.getUniformLocation(EyeTwoShaderProgram, 'uEyeTwoProjectionMatrix'),
+                modelViewMatrix: gl.getUniformLocation(EyeTwoShaderProgram, 'uEyeTwoModelViewMatrix'),
+            },
+        };
+        // Object Details
+
+        // Positioning of vectors
+        const EyeTwoPositions = [
+            // Front face
+            -0.05, -0.05, 0.05,
+            0.05, -0.05, 0.05,
+            0.05, 0.05, 0.05,
+            -0.05, 0.05, 0.05,
+
+            // Back face
+            -0.05, -0.05, -0.05,
+            -0.05, 0.05, -0.05,
+            0.05, 0.05, -0.05,
+            0.05, -0.05, -0.05,
+
+            // Top face
+            -0.05, 0.05, -0.05,
+            -0.05, 0.05, 0.05,
+            0.05, 0.05, 0.05,
+            0.05, 0.05, -0.05,
+
+            // Bottom face
+            -0.05, -0.05, -0.05,
+            0.05, -0.05, -0.05,
+            0.05, -0.05, 0.05,
+            -0.05, -0.05, 0.05,
+
+            // Right face
+            0.05, -0.05, -0.05,
+            0.05, 0.05, -0.05,
+            0.05, 0.05, 0.05,
+            0.05, -0.05, 0.05,
+
+            // Left face
+            -0.05, -0.05, -0.05,
+            -0.05, -0.05, 0.05,
+            -0.05, 0.05, 0.05,
+            -0.05, 0.05, -0.05,
+        ];
+
+        // Coloring of 3D Model
+        const EyeTwoFaceColors = [
+            [0.0, 0.0, 0.0, 1.0],    // Front face: white
+            [0.0, 0.0, 0.0, 1.0],    // Back face: red
+            [0.0, 0.0, 0.0, 1.0],    // Top face: green
+            [0.0, 0.0, 0.0, 1.0],    // Bottom face: blue
+            [0.0, 0.0, 0.0, 1.0],    // Right face: yellow
+            [0.0, 0.0, 0.0, 1.0],    // Left face: purple
+        ];
+
+        // Indices for individual vectors
+        const EyeTwoIndices = [
+            0, 1, 2, 0, 2, 3,    // front
+            4, 5, 6, 4, 6, 7,    // back
+            8, 9, 10, 8, 10, 11,   // top
+            12, 13, 14, 12, 14, 15,   // bottom
+            16, 17, 18, 16, 18, 19,   // right
+            20, 21, 22, 20, 22, 23,   // left
+        ];
+
+        // Rotation and Transition data
+        const EyeTwoPosInfo = {
+            xRotation: -0.45,
+            yRotation: 0,
+            zRotation: 1.5,
+
+            xTranslation: 0.00,
+            yTranslation: 0.32,
+            zTranslation: -5.2,
+        };
+
+        const EyeTwoBuffers = initBuffer(gl, EyeTwoPositions, EyeTwoFaceColors, EyeTwoIndices);
+
+        // Draw ArmOne
+        drawScene(gl, EyeTwoProgramInfo, EyeTwoBuffers, EyeTwoPosInfo);
+    }
+
+    /*
+        Mouth MODEL
+   */
+    {
+        // Vertex Shader Program
+        const vMouthShaderProgram = `
+        attribute vec4 aMouthVertexPosition;
+        attribute vec4 aMouthVertexColor;
+
+        uniform mat4 uMouthModelViewMatrix;
+        uniform mat4 uMouthProjectionMatrix;
+
+        varying lowp vec4 vMouthColor;
+
+        void main() {
+            gl_Position = uMouthProjectionMatrix * uMouthModelViewMatrix * aMouthVertexPosition;
+            vMouthColor = aMouthVertexColor;
+        }
+        `;
+
+        // Fragment Shader program
+        const fMouthShaderProgram = `
+        varying lowp vec4 vMouthColor; 
+        void main() {
+            gl_FragColor = vMouthColor;
+        }
+        `;
+
+        // Initialize the shader program
+        const MouthShaderProgram = initShaderProgram(gl, vMouthShaderProgram, fMouthShaderProgram);
+
+        //Lookup attributes and uniform locations
+        const MouthProgramInfo = {
+            program: MouthShaderProgram,
+            attribLocations: {
+                vertexPosition: gl.getAttribLocation(MouthShaderProgram, 'aMouthVertexPosition'),
+                vertexColor: gl.getAttribLocation(MouthShaderProgram, 'aMouthVertexColor'),
+            },
+            uniformLocations: {
+                projectionMatrix: gl.getUniformLocation(MouthShaderProgram, 'uMouthProjectionMatrix'),
+                modelViewMatrix: gl.getUniformLocation(MouthShaderProgram, 'uMouthModelViewMatrix'),
+            },
+        };
+        // Object Details
+
+        // Positioning of vectors
+        const MouthPositions = [
+            // Front face
+            -0.05, -0.5, 0.05,
+            0.05, -0.5, 0.05,
+            0.05, 0.05, 0.05,
+            -0.05, 0.05, 0.05,
+
+            // Back face
+            -0.05, -0.05, -0.05,
+            -0.05, 0.05, -0.05,
+            0.05, 0.05, -0.05,
+            0.05, -0.05, -0.05,
+
+            // Top face
+            -0.05, 0.05, -0.05,
+            -0.05, 0.05, 0.05,
+            0.05, 0.05, 0.05,
+            0.05, 0.05, -0.05,
+
+            // Bottom face
+            -0.05, -0.05, -0.05,
+            0.05, -0.05, -0.05,
+            0.05, -0.05, 0.05,
+            -0.05, -0.05, 0.05,
+
+            // Right face
+            0.05, -0.05, -0.05,
+            0.05, 0.05, -0.05,
+            0.05, 0.05, 0.05,
+            0.05, -0.05, 0.05,
+
+            // Left face
+            -0.05, -0.05, -0.05,
+            -0.05, -0.05, 0.05,
+            -0.05, 0.05, 0.05,
+            -0.05, 0.05, -0.05,
+        ];
+
+        // Coloring of 3D Model
+        const MouthFaceColors = [
+            [0.0, 0.0, 0.0, 1.0],    // Front face: white
+            [0.0, 0.0, 0.0, 1.0],    // Back face: red
+            [0.0, 0.0, 0.0, 1.0],    // Top face: green
+            [0.0, 0.0, 0.0, 1.0],    // Bottom face: blue
+            [0.0, 0.0, 0.0, 1.0],    // Right face: yellow
+            [0.0, 0.0, 0.0, 1.0],    // Left face: purple
+        ];
+
+        // Indices for individual vectors
+        const MouthIndices = [
+            0, 1, 2, 0, 2, 3,    // front
+            4, 5, 6, 4, 6, 7,    // back
+            8, 9, 10, 8, 10, 11,   // top
+            12, 13, 14, 12, 14, 15,   // bottom
+            16, 17, 18, 16, 18, 19,   // right
+            20, 21, 22, 20, 22, 23,   // left
+        ];
+
+        // Rotation and Transition data
+        const MouthPosInfo = {
+            xRotation: -0.45,
+            yRotation: 0,
+            zRotation: 1.5,
+
+            xTranslation: 0.00,
+            yTranslation: 0.1,
+            zTranslation: -5.2,
+        };
+
+        const MouthBuffers = initBuffer(gl, MouthPositions, MouthFaceColors, MouthIndices);
+
+        // Draw ArmOne
+        drawScene(gl, MouthProgramInfo, MouthBuffers, MouthPosInfo);
+    }
     
 }
 
