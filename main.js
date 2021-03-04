@@ -1,8 +1,11 @@
+//
+// Author: Chayton Hamric
+// Project: Computer Graphics Project 2
+// Date Finished: 3/2/20
+//
+
 main();
 
-//
-// Start here
-//
 function main() {
     const canvas = document.querySelector('#glcanvas');
     // Initialize the GL context
