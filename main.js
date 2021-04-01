@@ -7,7 +7,9 @@
 var eyeColor = 0.0;
 var cc = 0.0;
 var jump = 0.0;
-main(eyeColor, cc);
+var turn = 0.0;
+var quit = 0;
+main(eyeColor, cc, jump, turn);
 
 window.addEventListener('keydown', (event) => {
     if (event.key == 'b') {
@@ -47,13 +49,21 @@ window.addEventListener('keydown', (event) => {
         })
 
     }
+    else if(event.key == 't'){
+        turn = 1;
+        main(eyeColor, cc, jump, turn);
+    }
+    else if(event.key == 'q'){
+        quit = 1;
+        main(eyeColor, cc, jump, turn, quit);
+    }
 })
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-function main(eyeColor, cc) {
+function main(eyeColor, cc, jump, turn, quit) {
     const canvas = document.querySelector('#glcanvas');
     // Initialize the GL context
     const gl = canvas.getContext('webgl',{ preserveDrawingBuffer: true });
@@ -1021,7 +1031,7 @@ function main(eyeColor, cc) {
             zRotation: 1.5,
 
             xTranslation: 0.00,
-            yTranslation: 0.32,
+            yTranslation: 0.3,
             zTranslation: -5.2,
         };
 
@@ -1152,6 +1162,14 @@ function main(eyeColor, cc) {
         drawScene(gl, MouthProgramInfo, MouthBuffers, MouthPosInfo);
     }
     
+    if(quit == 1){
+        gl.clearColor(1.0, 1.0, 1.0, 1.0);  // Sets canvas to white
+        gl.clearDepth(1);                   // Clears everything
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+        sleep(250).then(() => {
+            alert("Project has quit refresh to restart")
+        })
+    }
 }
 
 
@@ -1264,9 +1282,9 @@ function drawScene(gl, ProgramInfo, buffers, PosInfo){
     const modelViewMatrix = mat4.create();
     mat4.translate(modelViewMatrix, modelViewMatrix, [PosInfo.xTranslation, PosInfo.yTranslation+jump, PosInfo.zTranslation]);
 
-    mat4.rotate(modelViewMatrix, modelViewMatrix, PosInfo.zRotation, [0, 0, 1]); // Z Rotation
+    mat4.rotate(modelViewMatrix, modelViewMatrix, PosInfo.zRotation, [0, 0, 1]);        // Z Rotation
     mat4.rotate(modelViewMatrix, modelViewMatrix, PosInfo.yRotation, [0, 1, 0]); // Y Rotation
-    mat4.rotate(modelViewMatrix, modelViewMatrix, PosInfo.xRotation, [1, 0, 0]); // X Rotation
+    mat4.rotate(modelViewMatrix, modelViewMatrix, PosInfo.xRotation, [1, 0, 0]);        // X Rotation
 
     // Pulling position to webGL
     {
