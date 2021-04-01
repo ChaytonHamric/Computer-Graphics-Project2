@@ -1,27 +1,25 @@
 //
 // Author: Chayton Hamric
-// Project: Computer Graphics Project 2
-// Date Finished: 3/2/20
+// Project: Computer Graphics Project 3
+// Date Finished: In Progress
 //
 
 var eyeColor = 0.0;
+var cc = 0.0;
+main(eyeColor, cc);
 
-main(eyeColor);
-
-// window.addEventListener('keydown', (event) => {
-//     if (event.key = 'b') {
-//         eyeColor = 0.0;
-//         main(eyeColor);
-//     }
-// })
 window.addEventListener('keydown', (event) => {
-    if (event.key = 'b') {
+    if (event.key == 'b') {
         eyeColor = 1.0;
-        main(eyeColor);
+        main(eyeColor, cc);
         sleep(1000).then(()=> {
             eyeColor = 0.0;
-            main(eyeColor);
+            main(eyeColor, cc);
         })
+    }
+    else if (event.key == 'c') {
+        cc = Math.random();
+        main(eyeColor, cc);
     }
 })
 
@@ -29,7 +27,7 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-function main(eyeColor) {
+function main(eyeColor, cc) {
     const canvas = document.querySelector('#glcanvas');
     // Initialize the GL context
     const gl = canvas.getContext('webgl',{ preserveDrawingBuffer: true });
@@ -127,15 +125,13 @@ function main(eyeColor) {
     
     // Coloring of 3D Model
     const faceColors = [
-        [0.0, 0.0, 0.0, 1.0],    // Front face
-        [1.0, 0.0, 0.0, 1.0],    // Back face
-        [0.0, 1.0, 0.0, 1.0],    // Top face
-        [0.0, 0.0, 1.0, 1.0],    // Bottom face
-        [1.0, 1.0, 0.0, 1.0],    // Right face
-        [1.0, 0.0, 1.0, 1.0],    // Left face
-    ];
-
-    // Indices for individual vectors
+        [cc, cc, cc, 1.0],    // Front face
+        [1.0, cc, cc, 1.0],    // Back face
+        [cc, 1.0, cc, 1.0],    // Top face
+        [cc, cc, 1.0, 1.0],    // Bottom face
+        [1.0, 1.0, cc, 1.0],    // Right face
+        [1.0, cc, 1.0, 1.0],    // Left face
+    ];cc   // Indices for individual vectors
     const indices = [
         0, 1, 2, 0, 2, 3,           // front
         4, 5, 6, 4, 6, 7,           // back
@@ -246,12 +242,12 @@ function main(eyeColor) {
 
         // Coloring of 3D Model
         const ArmTwoFaceColors = [
-            [0.0, 0.0, 0.0, 1.0],    // Front face: white
-            [1.0, 0.0, 0.0, 1.0],    // Back face: red
-            [1.0, 0.0, 0.0, 1.0],    // Top face: green
-            [1.0, 0.0, 0.0, 1.0],    // Bottom face: blue
-            [1.0, 0.0, 0.0, 1.0],    // Right face: yellow
-            [1.0, 0.0, 1.0, 1.0],    // Left face: purple
+            [cc, cc, cc, 1.0],    // Front face: white
+            [1.0, cc, cc, 1.0],    // Back face: red
+            [1.0, cc, cc, 1.0],    // Top face: green
+            [1.0, cc, cc, 1.0],    // Bottom face: blue
+            [1.0, cc, cc, 1.0],    // Right face: yellow
+            [1.0, cc, 1.0, 1.0],    // Left face: purple
         ];
 
         // Indices for individual vectors
@@ -367,10 +363,10 @@ function main(eyeColor) {
 
         // Coloring of 3D Model
         const BodyFaceColors = [
-            [0.0, 0.0, 0.2, 1.0],    // Front face: white
-            [1.0, 0.0, 0.0, 1.0],    // Back face: red
-            [0.0, 1.0, 0.0, 1.0],    // Top face: green
-            [0.0, 0.0, 1.0, 1.0],    // Bottom face: blue
+            [cc, cc, 0.2, 1.0],    // Front face: white
+            [1.0, cc, cc, 1.0],    // Back face: red
+            [cc, 1.0, cc, 1.0],    // Top face: green
+            [cc, cc, 1.0, 1.0],    // Bottom face: blue
             [1.0, 1.0, 0.0, 1.0],    // Right face: yellow
             [1.0, 0.0, 1.0, 1.0],    // Left face: purple
         ];
@@ -488,12 +484,12 @@ function main(eyeColor) {
 
         // Coloring of 3D Model
         const HeadFaceColors = [
-            [0.4, 0.0, 0.4, 1.0],    // Front face: white
-            [1.0, 0.0, 1.0, 1.0],    // Back face: red
-            [1.0, 0.0, 1.0, 1.0],    // Top face: green
-            [1.0, 0.0, 1.0, 1.0],    // Bottom face: blue
-            [1.0, 0.0, 1.0, 1.0],    // Right face: yellow
-            [1.0, 0.0, 1.0, 1.0],    // Left face: purple
+            [0.4, cc, 0.4, 1.0],    // Front face: white
+            [1.0, cc, 1.0, 1.0],    // Back face: red
+            [1.0, cc, 1.0, 1.0],    // Top face: green
+            [1.0, cc, 1.0, 1.0],    // Bottom face: blue
+            [1.0, cc, 1.0, 1.0],    // Right face: yellow
+            [1.0, cc, 1.0, 1.0],    // Left face: purple
         ];
 
         // Indices for individual vectors
@@ -608,12 +604,12 @@ function main(eyeColor) {
 
         // Coloring of 3D Model
         const LegOneFaceColors = [
-            [0.0, 0.4, 0.6, 1.0],    // Front face: white
-            [0.0, 1.0, 1.0, 1.0],    // Back face: red
-            [0.0, 1.0, 1.0, 1.0],    // Top face: green
-            [0.0, 1.0, 1.0, 1.0],    // Bottom face: blue
-            [0.0, 1.0, 1.0, 1.0],    // Right face: yellow
-            [0.0, 1.0, 1.0, 1.0],    // Left face: purple
+            [cc, 0.4, 0.6, 1.0],    // Front face: white
+            [cc, 1.0, 1.0, 1.0],    // Back face: red
+            [cc, 1.0, 1.0, 1.0],    // Top face: green
+            [cc, 1.0, 1.0, 1.0],    // Bottom face: blue
+            [cc, 1.0, 1.0, 1.0],    // Right face: yellow
+            [cc, 1.0, 1.0, 1.0],    // Left face: purple
         ];
 
         // Indices for individual vectors
@@ -728,11 +724,11 @@ function main(eyeColor) {
 
         // Coloring of 3D Model
         const LegTwoFaceColors = [
-            [0.0, 0.4, 0.6, 1.0],    // Front face: white
-            [0.0, 1.0, 1.0, 1.0],    // Back face: red
-            [0.0, 1.0, 1.0, 1.0],    // Top face: green
-            [0.0, 1.0, 1.0, 1.0],    // Bottom face: blue
-            [0.0, 1.0, 1.0, 1.0],    // Right face: yellow    // Right face: yellow
+            [cc, 0.4, 0.6, 1.0],    // Front face: white
+            [cc, 1.0, 1.0, 1.0],    // Back face: red
+            [cc, 1.0, 1.0, 1.0],    // Top face: green
+            [cc, 1.0, 1.0, 1.0],    // Bottom face: blue
+            [cc, 1.0, 1.0, 1.0],    // Right face: yellow    // Right face: yellow
             [1.0, 0.0, 1.0, 1.0],    // Left face: purple
         ];
 
