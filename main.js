@@ -6,20 +6,46 @@
 
 var eyeColor = 0.0;
 var cc = 0.0;
+var jump = 0.0;
 main(eyeColor, cc);
 
 window.addEventListener('keydown', (event) => {
     if (event.key == 'b') {
         eyeColor = 1.0;
-        main(eyeColor, cc);
+        main(eyeColor, cc, jump);
         sleep(1000).then(()=> {
             eyeColor = 0.0;
-            main(eyeColor, cc);
+            main(eyeColor, cc, jump);
         })
     }
     else if (event.key == 'c') {
         cc = Math.random();
-        main(eyeColor, cc);
+        main(eyeColor, cc, jump);
+    }
+    else if(event.key == 'j'){
+        jump += 0.5;
+        main(eyeColor, cc, jump);
+        sleep(250).then(() => {
+            jump += 0.5;
+            main(eyeColor, cc, jump);
+        })
+        sleep(250).then(() => {
+            jump += 0.5;
+            main(eyeColor, cc, jump);
+        })
+        sleep(250).then(() => {
+            jump -= 0.5;
+            main(eyeColor, cc, jump);
+        })
+        sleep(250).then(() => {
+            jump -= 0.5;
+            main(eyeColor, cc, jump);
+        })
+        sleep(250).then(() => {
+            jump -= 0.5;
+            main(eyeColor, cc, jump);
+        })
+
     }
 })
 
@@ -31,6 +57,10 @@ function main(eyeColor, cc) {
     const canvas = document.querySelector('#glcanvas');
     // Initialize the GL context
     const gl = canvas.getContext('webgl',{ preserveDrawingBuffer: true });
+
+    gl.clearColor(1.0, 1.0, 1.0, 1.0);  // Sets canvas to white
+    gl.clearDepth(1);                   // Clears everything
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     // If we don't have a GL context, give up now
     // Only continue if WebGL is available and working
@@ -1232,7 +1262,7 @@ function drawScene(gl, ProgramInfo, buffers, PosInfo){
 
     // Set the draw position
     const modelViewMatrix = mat4.create();
-    mat4.translate(modelViewMatrix, modelViewMatrix, [PosInfo.xTranslation, PosInfo.yTranslation, PosInfo.zTranslation]);
+    mat4.translate(modelViewMatrix, modelViewMatrix, [PosInfo.xTranslation, PosInfo.yTranslation+jump, PosInfo.zTranslation]);
 
     mat4.rotate(modelViewMatrix, modelViewMatrix, PosInfo.zRotation, [0, 0, 1]); // Z Rotation
     mat4.rotate(modelViewMatrix, modelViewMatrix, PosInfo.yRotation, [0, 1, 0]); // Y Rotation
