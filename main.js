@@ -4,9 +4,32 @@
 // Date Finished: 3/2/20
 //
 
-main();
+var eyeColor = 0.0;
 
-function main() {
+main(eyeColor);
+
+// window.addEventListener('keydown', (event) => {
+//     if (event.key = 'b') {
+//         eyeColor = 0.0;
+//         main(eyeColor);
+//     }
+// })
+window.addEventListener('keydown', (event) => {
+    if (event.key = 'b') {
+        eyeColor = 1.0;
+        main(eyeColor);
+        sleep(1000).then(()=> {
+            eyeColor = 0.0;
+            main(eyeColor);
+        })
+    }
+})
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function main(eyeColor) {
     const canvas = document.querySelector('#glcanvas');
     // Initialize the GL context
     const gl = canvas.getContext('webgl',{ preserveDrawingBuffer: true });
@@ -18,7 +41,7 @@ function main() {
         alert('Unable to initialize WebGL. Your browser or machine may not support it.');
         return;
     }
-    
+
     /*
             ARM 1 MODEL
     */
@@ -826,12 +849,12 @@ function main() {
 
         // Coloring of 3D Model
         const EyeOneFaceColors = [
-            [0.0, 0.0, 0.0, 1.0],    // Front face: white
-            [0.0, 0.0, 0.0, 1.0],    // Back face: red
-            [0.0, 0.0, 0.0, 1.0],    // Top face: green
-            [0.0, 0.0, 0.0, 1.0],    // Bottom face: blue
-            [0.0, 0.0, 0.0, 1.0],    // Right face: yellow
-            [0.0, 0.0, 0.0, 1.0],    // Left face: purple
+            [eyeColor, eyeColor, eyeColor, 1.0],    // Front face: white
+            [eyeColor, eyeColor, eyeColor, 1.0],    // Back face: red
+            [eyeColor, eyeColor, eyeColor, 1.0],    // Top face: green
+            [eyeColor, eyeColor, eyeColor, 1.0],    // Bottom face: blue
+            [eyeColor, eyeColor, eyeColor, 1.0],    // Right face: yellow
+            [eyeColor, eyeColor, eyeColor, 1.0],    // Left face: purple
         ];
 
         // Indices for individual vectors
@@ -947,12 +970,12 @@ function main() {
 
         // Coloring of 3D Model
         const EyeTwoFaceColors = [
-            [0.0, 0.0, 0.0, 1.0],    // Front face: white
-            [0.0, 0.0, 0.0, 1.0],    // Back face: red
-            [0.0, 0.0, 0.0, 1.0],    // Top face: green
-            [0.0, 0.0, 0.0, 1.0],    // Bottom face: blue
-            [0.0, 0.0, 0.0, 1.0],    // Right face: yellow
-            [0.0, 0.0, 0.0, 1.0],    // Left face: purple
+            [eyeColor, eyeColor, eyeColor, 1.0],    // Front face: white
+            [eyeColor, eyeColor, eyeColor, 1.0],    // Back face: red
+            [eyeColor, eyeColor, eyeColor, 1.0],    // Top face: green
+            [eyeColor, eyeColor, eyeColor, 1.0],    // Bottom face: blue
+            [eyeColor, eyeColor, eyeColor, 1.0],    // Right face: yellow
+            [eyeColor, eyeColor, eyeColor, 1.0],    // Left face: purple
         ];
 
         // Indices for individual vectors
