@@ -9,61 +9,88 @@ var cc = 0.0;
 var jump = 0.0;
 var turn = 0.0;
 var quit = 0;
-main(eyeColor, cc, jump, turn);
+var wave = 0;
+var tempMove = 0;
+var DistanceChange = 0;
+var AngleChange = 0;
+
+const viewMatrix = mat4.create();
+
+main(eyeColor, cc, jump, turn, quit, wave, tempMove);
 
 window.addEventListener('keydown', (event) => {
     if (event.key == 'b') {
         eyeColor = 1.0;
-        main(eyeColor, cc, jump);
+        main(eyeColor, cc, jump, turn, quit, wave, tempMove);
         sleep(1000).then(()=> {
             eyeColor = 0.0;
-            main(eyeColor, cc, jump);
+            main(eyeColor, cc, jump, turn, quit, wave, tempMove);
         })
     }
     else if (event.key == 'c') {
         cc = Math.random();
-        main(eyeColor, cc, jump);
+        main(eyeColor, cc, jump, turn, quit, wave, tempMove);
     }
     else if(event.key == 'j'){
         jump += 0.5;
-        main(eyeColor, cc, jump);
+        main(eyeColor, cc, jump, turn, quit, wave, tempMove);
         sleep(250).then(() => {
             jump += 0.5;
-            main(eyeColor, cc, jump);
+            main(eyeColor, cc, jump, turn, quit, wave, tempMove);
         })
         sleep(250).then(() => {
             jump += 0.5;
-            main(eyeColor, cc, jump);
+            main(eyeColor, cc, jump, turn, quit, wave, tempMove);
         })
         sleep(250).then(() => {
             jump -= 0.5;
-            main(eyeColor, cc, jump);
+            main(eyeColor, cc, jump, turn, quit, wave, tempMove);
         })
         sleep(250).then(() => {
             jump -= 0.5;
-            main(eyeColor, cc, jump);
+            main(eyeColor, cc, jump, turn, quit, wave, tempMove);
         })
         sleep(250).then(() => {
             jump -= 0.5;
-            main(eyeColor, cc, jump);
+            main(eyeColor, cc, jump, turn, quit, wave, tempMove);
         })
 
     }
     else if(event.key == 't'){
         turn = 1;
-        main(eyeColor, cc, jump, turn);
+        main(eyeColor, cc, jump, turn, quit, wave, tempMove);
     }
     else if(event.key == 'q'){
         quit = 1;
-        main(eyeColor, cc, jump, turn, quit);
+        main(eyeColor, cc, jump, turn, quit, wave, tempMove);
+    }
+    else if (event.key == 'w') {
+        wave = -0.7
+        tempMove = 0.3;
+        main(eyeColor, cc, jump, turn, quit, wave, tempMove);
+        sleep(250).then(() => {
+            wave = 0;
+            tempMove = 0;
+            main(eyeColor, cc, jump, turn, quit, wave, tempMove);
+        })
     }
 })
+
+document.getElementById("DistanceSlider").onchange = function (event) { 
+    DistanceChange = event.target.value;
+    main(eyeColor, cc, jump, turn, quit, wave, tempMove);
+};
+
+document.getElementById("AngleSlider").onchange = function (event) {
+    AngleChange = event.target.value;
+    main(eyeColor, cc, jump, turn, quit, wave, tempMove);
+};
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-function main(eyeColor, cc, jump, turn, quit) {
+function main(eyeColor, cc, jump, Turn, quit, wave, tempMove, DistanceChange) {
     const canvas = document.querySelector('#glcanvas');
     // Initialize the GL context
     const gl = canvas.getContext('webgl',{ preserveDrawingBuffer: true });
@@ -184,12 +211,12 @@ function main(eyeColor, cc, jump, turn, quit) {
     // Rotation and Transition data
     const ArmOnePosInfo = {
         xRotation: 1.45,
-        yRotation: 0.45,
-        zRotation: -0.45,
+        yRotation:  0.45,
+        zRotation: -0.45 - wave,
 
-        xTranslation: 0,
+        xTranslation: 0 - tempMove,
         yTranslation: -0.2,
-        zTranslation: -5.0
+        zTranslation: -5.0 + tempMove
     };
 
     const ArmOneBuffers = initBuffer(gl, positions, faceColors, indices);
@@ -304,9 +331,9 @@ function main(eyeColor, cc, jump, turn, quit) {
         const ArmTwoPosInfo = {
             xRotation: -0.45,
             yRotation: 0.45,
-            zRotation: 0.45,
+            zRotation: 0.45 + wave,
 
-            xTranslation: -0.2,
+            xTranslation: -0.2 - tempMove,
             yTranslation: -0.6,
             zTranslation: -6.0,
         };
@@ -424,7 +451,7 @@ function main(eyeColor, cc, jump, turn, quit) {
         // Rotation and Transition data
         const BodyPosInfo = {
             xRotation: -0.45,
-            yRotation: 0,
+            yRotation:  0,
             zRotation: 1.5,
 
             xTranslation: 0.35,
@@ -545,7 +572,7 @@ function main(eyeColor, cc, jump, turn, quit) {
         // Rotation and Transition data
         const HeadPosInfo = {
             xRotation: -0.45,
-            yRotation: 0,
+            yRotation:  0,
             zRotation: 1.5,
 
             xTranslation: 0.35,
@@ -665,7 +692,7 @@ function main(eyeColor, cc, jump, turn, quit) {
         // Rotation and Transition data
         const LegOnePosInfo = {
             xRotation: -0.45,
-            yRotation: 0,
+            yRotation:  0,
             zRotation: 1.5,
 
             xTranslation: 0.45,
@@ -785,7 +812,7 @@ function main(eyeColor, cc, jump, turn, quit) {
         // Rotation and Transition data
         const LegTwoPosInfo = {
             xRotation: -0.7,
-            yRotation: 0.7,
+            yRotation:  0.7,
             zRotation: 0.5,
 
             xTranslation: -0.25,
@@ -906,7 +933,7 @@ function main(eyeColor, cc, jump, turn, quit) {
         // Rotation and Transition data
         const EyeOnePosInfo = {
             xRotation: -0.45,
-            yRotation: 0,
+            yRotation:  0,
             zRotation: 1.5,
 
             xTranslation: 0.35,
@@ -1027,7 +1054,7 @@ function main(eyeColor, cc, jump, turn, quit) {
         // Rotation and Transition data
         const EyeTwoPosInfo = {
             xRotation: -0.45,
-            yRotation: 0,
+            yRotation:  0,
             zRotation: 1.5,
 
             xTranslation: 0.00,
@@ -1148,7 +1175,7 @@ function main(eyeColor, cc, jump, turn, quit) {
         // Rotation and Transition data
         const MouthPosInfo = {
             xRotation: -0.45,
-            yRotation: 0,
+            yRotation:  0,
             zRotation: 1.5,
 
             xTranslation: 0.00,
@@ -1264,7 +1291,7 @@ function drawScene(gl, ProgramInfo, buffers, PosInfo){
 
     // Clear canvas
     // gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
+    
     // Create perspective matrix
     const FOV = 45 * Math.PI / 180;
     const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
@@ -1280,10 +1307,10 @@ function drawScene(gl, ProgramInfo, buffers, PosInfo){
 
     // Set the draw position
     const modelViewMatrix = mat4.create();
-    mat4.translate(modelViewMatrix, modelViewMatrix, [PosInfo.xTranslation, PosInfo.yTranslation+jump, PosInfo.zTranslation]);
+    mat4.translate(modelViewMatrix, modelViewMatrix, [PosInfo.xTranslation, PosInfo.yTranslation + jump, PosInfo.zTranslation - DistanceChange]);
 
     mat4.rotate(modelViewMatrix, modelViewMatrix, PosInfo.zRotation, [0, 0, 1]);        // Z Rotation
-    mat4.rotate(modelViewMatrix, modelViewMatrix, PosInfo.yRotation, [0, 1, 0]); // Y Rotation
+    mat4.rotate(modelViewMatrix, modelViewMatrix, PosInfo.yRotation, [0, 1, 0]);        // Y Rotation
     mat4.rotate(modelViewMatrix, modelViewMatrix, PosInfo.xRotation, [1, 0, 0]);        // X Rotation
 
     // Pulling position to webGL
