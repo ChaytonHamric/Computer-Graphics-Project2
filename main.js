@@ -57,7 +57,7 @@ window.addEventListener('keydown', (event) => {
 
     }
     else if(event.key == 't'){
-        turn = 1;
+        turn = 2;
         main(eyeColor, cc, jump, turn, quit, wave, tempMove);
     }
     else if(event.key == 'q'){
@@ -78,11 +78,6 @@ window.addEventListener('keydown', (event) => {
 
 document.getElementById("DistanceSlider").onchange = function (event) { 
     DistanceChange = event.target.value;
-    main(eyeColor, cc, jump, turn, quit, wave, tempMove);
-};
-
-document.getElementById("AngleSlider").onchange = function (event) {
-    AngleChange = event.target.value;
     main(eyeColor, cc, jump, turn, quit, wave, tempMove);
 };
 
@@ -329,7 +324,7 @@ function main(eyeColor, cc, jump, Turn, quit, wave, tempMove, DistanceChange) {
 
         // Rotation and Transition data
         const ArmTwoPosInfo = {
-            xRotation: -0.45,
+            xRotation: -0.45 ,
             yRotation: 0.45,
             zRotation: 0.45 + wave,
 
@@ -451,7 +446,7 @@ function main(eyeColor, cc, jump, Turn, quit, wave, tempMove, DistanceChange) {
         // Rotation and Transition data
         const BodyPosInfo = {
             xRotation: -0.45,
-            yRotation:  0,
+            yRotation: 0,
             zRotation: 1.5,
 
             xTranslation: 0.35,
@@ -572,7 +567,7 @@ function main(eyeColor, cc, jump, Turn, quit, wave, tempMove, DistanceChange) {
         // Rotation and Transition data
         const HeadPosInfo = {
             xRotation: -0.45,
-            yRotation:  0,
+            yRotation: 0,
             zRotation: 1.5,
 
             xTranslation: 0.35,
@@ -692,7 +687,7 @@ function main(eyeColor, cc, jump, Turn, quit, wave, tempMove, DistanceChange) {
         // Rotation and Transition data
         const LegOnePosInfo = {
             xRotation: -0.45,
-            yRotation:  0,
+            yRotation: 0,
             zRotation: 1.5,
 
             xTranslation: 0.45,
@@ -812,7 +807,7 @@ function main(eyeColor, cc, jump, Turn, quit, wave, tempMove, DistanceChange) {
         // Rotation and Transition data
         const LegTwoPosInfo = {
             xRotation: -0.7,
-            yRotation:  0.7,
+            yRotation: 0.7,
             zRotation: 0.5,
 
             xTranslation: -0.25,
@@ -933,7 +928,7 @@ function main(eyeColor, cc, jump, Turn, quit, wave, tempMove, DistanceChange) {
         // Rotation and Transition data
         const EyeOnePosInfo = {
             xRotation: -0.45,
-            yRotation:  0,
+            yRotation: 0,
             zRotation: 1.5,
 
             xTranslation: 0.35,
@@ -1053,8 +1048,8 @@ function main(eyeColor, cc, jump, Turn, quit, wave, tempMove, DistanceChange) {
 
         // Rotation and Transition data
         const EyeTwoPosInfo = {
-            xRotation: -0.45,
-            yRotation:  0,
+            xRotation: -0.45 ,
+            yRotation: 0,
             zRotation: 1.5,
 
             xTranslation: 0.00,
@@ -1175,7 +1170,7 @@ function main(eyeColor, cc, jump, Turn, quit, wave, tempMove, DistanceChange) {
         // Rotation and Transition data
         const MouthPosInfo = {
             xRotation: -0.45,
-            yRotation:  0,
+            yRotation: 0,
             zRotation: 1.5,
 
             xTranslation: 0.00,
@@ -1310,7 +1305,7 @@ function drawScene(gl, ProgramInfo, buffers, PosInfo){
     mat4.translate(modelViewMatrix, modelViewMatrix, [PosInfo.xTranslation, PosInfo.yTranslation + jump, PosInfo.zTranslation - DistanceChange]);
 
     mat4.rotate(modelViewMatrix, modelViewMatrix, PosInfo.zRotation, [0, 0, 1]);        // Z Rotation
-    mat4.rotate(modelViewMatrix, modelViewMatrix, PosInfo.yRotation, [0, 1, 0]);        // Y Rotation
+    mat4.rotate(modelViewMatrix, modelViewMatrix, PosInfo.yRotation + turn, [0, 1, 0]);        // Y Rotation
     mat4.rotate(modelViewMatrix, modelViewMatrix, PosInfo.xRotation, [1, 0, 0]);        // X Rotation
 
     // Pulling position to webGL
